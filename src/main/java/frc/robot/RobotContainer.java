@@ -18,14 +18,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import frc.robot.Constants.QuickTuning;
 import frc.robot.Constants.Vision;
+import frc.robot.commands.TeleopIntake;
 import frc.robot.commands.Load;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.VisionAutoAlign;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Loader;
 import frc.robot.subsystems.ShooterSubsys;
 import frc.robot.subsystems.Swerve;
 import java.util.List;
+
+
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -45,9 +49,10 @@ public class RobotContainer {
     private final JoystickButton toggleSlowMode = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
-    private final JoystickButton autoAlignCenter = new JoystickButton(weapons, XboxController.Button.kA.value);
-    private final JoystickButton autoAlignLeft = new JoystickButton(weapons, XboxController.Button.kX.value);
-    private final JoystickButton autoAlignRight = new JoystickButton(weapons, XboxController.Button.kY.value);
+    //private final JoystickButton autoAlignCenter = new JoystickButton(weapons, XboxController.Button.kA.value);
+    //private final JoystickButton autoAlignLeft = new JoystickButton(weapons, XboxController.Button.kX.value);
+    //private final JoystickButton autoAlignRight = new JoystickButton(weapons, XboxController.Button.kY.value);
+    private final JoystickButton intake = new JoystickButton(weapons, XboxController.Button.kX.value);
     private final JoystickButton load = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton shoot = new JoystickButton(driver, XboxController.Button.kA.value);
     private final NetworkButton elasticAutoAlignCenter;
@@ -60,8 +65,9 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final ShooterSubsys s_Shooter = new ShooterSubsys();
+    private final Intake s_Intake = new Intake();
     private final Loader s_Loader = new Loader();
+    private final ShooterSubsys s_Shooter = new ShooterSubsys();
 
     public RobotContainer() {
         NetworkTable elasticTable = NetworkTableInstance.getDefault().getTable("Elastic");
@@ -125,13 +131,14 @@ public class RobotContainer {
             }
         }));
 
-        autoAlignCenter.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignCenterOffsetX));
-        autoAlignLeft.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignLeftOffsetX));
-        autoAlignRight.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignRightOffsetX));
+        //autoAlignCenter.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignCenterOffsetX));
+        //autoAlignLeft.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignLeftOffsetX));
+        //autoAlignRight.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignRightOffsetX));
         shoot.whileTrue(new Shoot(s_Shooter));
         load.whileTrue(new Load(s_Loader));
         load.onFalse(Commands.startEnd(s_Loader::runReverse, s_Loader::stop, s_Loader)
             .withTimeout(Constants.Loader.reverseSeconds));
+        intake.whileTrue(new TeleopIntake(s_Intake));
 
         elasticAutoAlignCenter.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignCenterOffsetX));
         elasticAutoAlignLeft.whileTrue(new VisionAutoAlign(s_Swerve, Vision.autoAlignLeftOffsetX));

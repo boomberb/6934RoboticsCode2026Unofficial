@@ -73,6 +73,14 @@ public final class Constants {
         public static final InvertedValue conveyorInvert = InvertedValue.Clockwise_Positive;
     }
 
+    public static final class Intake {
+        public static final int motorID = 0;
+        public static final int motor2ID = 0;
+
+        public static final double motorVoltage = 0;
+        public static final double motor2Voltage = 0;
+    }
+
     public static final class Vision {
         /* Limelight Configs & Location */
         // TODO: set LL pos and rot
