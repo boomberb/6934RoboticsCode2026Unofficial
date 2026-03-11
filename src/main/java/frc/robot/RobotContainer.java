@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -70,6 +71,8 @@ public class RobotContainer {
     private final ShooterSubsys s_Shooter = new ShooterSubsys();
 
     public RobotContainer() {
+        NamedCommands.registerCommand("Intake", new TeleopIntake(s_Intake).withTimeout(2.0));
+
         NetworkTable elasticTable = NetworkTableInstance.getDefault().getTable("Elastic");
         elasticAutoOptionsPublisher = elasticTable.getStringArrayTopic("Auto/Options").publish();
         elasticSelectedAutoEntry = elasticTable.getStringTopic("Auto/Selected").getEntry("DoNothing");
